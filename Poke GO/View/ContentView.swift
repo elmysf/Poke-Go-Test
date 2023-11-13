@@ -30,6 +30,10 @@ struct ContentView: View {
                     PokemonFavoriteView().tag(1)
                 case .notStarted:
                     Text("Not fetching yet")
+                    
+                    PokemonFavoriteView().tag(1)
+                    
+                    
                 }
             }
             .overlay( // Overlay the custom TabView component here

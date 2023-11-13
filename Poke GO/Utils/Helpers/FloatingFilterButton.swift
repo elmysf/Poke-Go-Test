@@ -24,9 +24,8 @@ struct ActionButton: View {
                 .frame(width: width, height: height)
                 .padding(16)
         })
-        .background(backgroundColor)
+        .background(Color.black)
         .foregroundColor(.white)
         .clipShape(Circle())
-        .shadow(color: .black, radius: 30, x: 0.0, y: 0.0)
     }
 }

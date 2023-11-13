@@ -7,31 +7,28 @@
 
 import Foundation
 import SwiftUI
-import Kingfisher
 
 struct PokemonDetailView: View {
     var pokemon: PokemonModel
     @State var showShiny = false
     
-    let pokemon: PokemonModel
-    let viewModel: PokemonRowViewModel
-
-    init(pokemon: PokemonModel) {
-        self.pokemon = pokemon
-        self.viewModel = PokemonRowViewModel(pokemon: pokemon)
-    }
-
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.purple, Color.white]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color(pokemon.background)]), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
 
                 Color.white.offset(y: 300)
 
             ScrollView {
-                KFImage(URL(string: pokemon.imageUrl))
-                    .resizable()
-                    .frame(width: 200, height: 200)
+                AsyncImage(url: showShiny ? pokemon.shinySprite : pokemon.sprite) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .zIndex(1)
+                } placeholder: {
+                    ProgressIndicatorView()
+                }
 
                 VStack(alignment: .leading) {
                     Text(pokemon.name.capitalized)
@@ -39,49 +36,65 @@ struct PokemonDetailView: View {
                         .padding(.top, 40)
                         .frame(maxWidth: .infinity, alignment: .center)
 
-                    HStack(spacing: -200){
-                        Text(pokemon.type.capitalized)
-                            .font(.system(size: 18,weight: .regular, design: .rounded))
-                            .foregroundColor(Color.white)
-                            .padding(.all, 8)
-                            .background(Color.purple.cornerRadius(radius: 126, corners: [.allCorners]))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        Text(pokemon.typeDefault.capitalized)
-                            .font(.system(size: 18,weight: .regular, design: .rounded))
-                            .foregroundColor(Color.white)
-                            .padding(.all, 8)
-                            .background(Color.green.cornerRadius(radius: 126, corners: [.allCorners]))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    }
                     
-                    Text(pokemon.description)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 12)
+                    Text("Types")
+                        .font(.system(size: 18,weight: .regular, design: .rounded))
+                        .padding(.bottom, -5)
+                        .frame(maxWidth: .infinity, alignment: .center)
                     
+                        HStack(spacing: -150){
+                            if pokemon.types.count > 0 {
+                                ForEach(pokemon.types, id: \.self) { type in
+                                    Text(type.capitalized)
+                                        .font(.system(size: 18,weight: .regular, design: .rounded))
+                                        .foregroundColor(Color.white)
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 16)
+                                        .background(Color(pokemon.background).cornerRadius(radius: 126, corners: [.allCorners]))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                }
+                            }
+                        }
+                        .padding()
                     
                     VStack(alignment: .leading){
                             Text("Stats")
                                 .font(.system(size: 16, weight: .semibold))
                         
-                        BarChartView(pokemon: pokemon)
+                        StatsView(pokemon: pokemon)
                             .padding(.leading, -32)
                             .padding(.trailing, 32)
                             .padding(.top, 8)
+                        
+                        
+                        VStack(alignment: .center){
+                            Button {
+                                showShiny.toggle()
+                            } label: {
+                                if showShiny {
+                                    Image(systemName:"wand.and.stars")
+                                } else {
+                                    Image(systemName:"wand.and.stars.inverse")
+                                        .foregroundStyle(Color.white)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(Color(pokemon.background))
+                            .cornerRadius(12)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 42)
+                        }
+                        .padding(.top, 32)
                     }
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
                     
                 }
-                .background(Color.white.cornerRadius(radius: 40, corners: [.topLeft, .topRight]))
+                .background(Color.white.cornerRadius(radius: 48, corners: [.topLeft, .topRight]))
                 .padding(.top, -80)
             }
         }
     }
 }
 
-struct PokemonDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        PokemonDetailView(pokemon: SAMPLE_POKEMON)
-    }
-}

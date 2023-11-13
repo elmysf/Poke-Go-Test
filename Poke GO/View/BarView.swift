@@ -6,6 +6,21 @@
 //
 
 import SwiftUI
+import Charts
+
+struct StatsView: View {
+    var pokemon: PokemonModel
+    var body: some View {
+        VStack {
+            BarView(value: pokemon.hp, title: "HP", color: .orange)
+            BarView(value: pokemon.attack, title: "Attack", color: .red)
+            BarView(value: pokemon.defense, title: "Defense", color: .blue)
+            BarView(value: pokemon.specialAttack, title: "S.Attack", color: .purple)
+            BarView(value: pokemon.specialDefense, title: "S.Defense", color: .green)
+            BarView(value: pokemon.speed, title: "Speed", color: .yellow)
+        }
+    }
+}
 
 struct BarView: View {
     var value: Int = 100
@@ -37,27 +52,3 @@ struct BarView: View {
         }
     }
 }
-
-struct BarChartView: View {
-    let pokemon: PokemonModel
-    var body: some View {
-        VStack {
-            BarView(value: pokemon.height, title: "HP", color: .orange)
-            BarView(value: pokemon.attack, title: "Attack", color: .red)
-            BarView(value: pokemon.defense, title: "Defense", color: .blue)
-            BarView(value: pokemon.weight, title: "Special Attack", color: .purple)
-            BarView(value: pokemon.speed, title: "Special Defense", color: .green)
-            BarView(value: pokemon.speed, title: "Speed", color: .mint)
-        }
-    }
-}
-
-struct BarView_Previews: PreviewProvider {
-    static var previews: some View {
-        BarView()
-        BarChartView(pokemon: SAMPLE_POKEMON)
-    }
-}
-
-
-

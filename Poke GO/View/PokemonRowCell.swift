@@ -7,15 +7,12 @@
 
 import Foundation
 import SwiftUI
-import Kingfisher
 
 struct PokemonRowCell: View {
     let pokemon: PokemonModel
-    let viewModel: PokemonRowViewModel
 
     init(pokemon: PokemonModel) {
         self.pokemon = pokemon
-        self.viewModel = PokemonRowViewModel(pokemon: pokemon)
     }
 
     var body: some View {
@@ -27,27 +24,37 @@ struct PokemonRowCell: View {
                     .padding(.leading)
                 Spacer()
 
-                HStack {
-                    Text(pokemon.type)
-                        .font(.subheadline).bold()
-                        .foregroundColor(.white)
-                        .padding(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color.white.opacity(0.25)))
-                            .frame(width: 100, height: 24)
+                HStack(spacing: 0){
+                    VStack{
+                        if pokemon.types.count > 0 {
+                            ForEach(pokemon.types, id: \.self) { type in
+                                Text(type.capitalized)
+                                    .font(.system(size: 10,weight: .regular, design: .rounded))
+                                    .foregroundColor(Color.white)
+                                    .padding(.vertical, 4)
+                                    .padding(.horizontal, 8)
+                                    .background(Color.purple.cornerRadius(radius: 126, corners: [.allCorners]))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                        }
+                    }
 
-                    KFImage(URL(string: self.pokemon.imageUrl))
-                        .resizable()
-                        .scaledToFit()
-                        .padding([.bottom, .trailing], 4)
-                        .frame(width: 68, height: 68)
+                    AsyncImage(url: pokemon.sprite) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                    }
                 }
             }.padding(.top, 4)
         }
-        .background(Color(viewModel.backgroundColor))
+        .background(Color(pokemon.background))
         .cornerRadius(12)
-        .shadow(color: Color(viewModel.backgroundColor), radius: 6, x: 0, y: 0)
+        .frame(width: 180, height: 110)
     }
 }
 
+#Preview {
+    return PokemonRowCell(pokemon: PokemonModel.makeTempPokemon())
+}

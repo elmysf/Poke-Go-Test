@@ -9,12 +9,11 @@ import SwiftUI
 
 @main
 struct Poke_GOApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject var viewModel = PokemonViewModel(pokemonService: PokemonService())
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ContentView(viewModel: self.viewModel)
         }
     }
 }
