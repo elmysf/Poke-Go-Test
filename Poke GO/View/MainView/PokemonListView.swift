@@ -91,7 +91,6 @@ struct PokemonListView: View {
                     
                 }
                 .padding()
-                .animation(.spring())
             }
         }
     }

@@ -41,11 +41,11 @@ struct BarView: View {
 
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .frame(width: 180, height: 20).animation(.default)
+                        .frame(width: 180, height: 20)
                         .foregroundColor(Color(.systemGray5))
 
                     Capsule()
-                        .frame(width: value > 250 ? CGFloat(200) : CGFloat(value), height: 20).animation(.default)
+                        .frame(width: value > 250 ? CGFloat(200) : CGFloat(value), height: 20)
                         .foregroundColor(color)
                 }
             }
