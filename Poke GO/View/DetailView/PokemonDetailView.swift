@@ -28,6 +28,8 @@ struct PokemonDetailView: View {
                         .zIndex(1)
                 } placeholder: {
                     ProgressIndicatorView()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(Color.mint)
                 }
 
                 VStack(alignment: .leading) {
